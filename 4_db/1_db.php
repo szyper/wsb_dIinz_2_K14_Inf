@@ -1,4 +1,4 @@
-<!doctype html>
+3_db_table_delete.php<!doctype html>
 <html lang="pl>">
 <head>
 	<meta charset="UTF-8">

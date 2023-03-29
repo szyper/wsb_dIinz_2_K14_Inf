@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!doctype html>
 <html lang="pl">
 <head>
@@ -11,8 +14,12 @@
 <body>
   <h4>Użytkownicy</h4>
   <?php
+    if (isset($_SESSION["error"])){
+      echo $_SESSION["error"];
+      unset($_SESSION["error"]);
+    }
     require_once "../scripts/connect.php";
-  $sql = "SELECT `users`.`id`, `users`.`firstName`, `users`.`lastName`, `users`.`birthday`, `cities`.`city` as `miasto`, `states`.`state`  FROM `users` INNER JOIN `cities` ON `users`.`city_id`=`cities`.`id` INNER JOIN `states` ON `cities`.`state_id`=`states`.`id`;";
+  $sql = "SELECT `u`.`id`, `u`.`firstName`, `u`.`lastName`, `u`.`birthday`, `c`.`city` as `miasto`, `s`.`state`  FROM `users` u INNER JOIN `cities` c ON `u`.`city_id`=`c`.`id` INNER JOIN `states` s ON `c`.`state_id`=`s`.`id`;";
     $result = $conn->query($sql);
     echo <<< TABLE
       <table>
@@ -25,7 +32,7 @@
           <th>Województwo</th>
         </tr>
 TABLE;
-  if($result->num_rows == 0){
+  if ($result->num_rows == 0){
 	  echo <<< TABLEUSERS
         <tr>
           <td colspan="6">Brak rekordów</td>
@@ -59,8 +66,31 @@ TABLEUSERS;
 		    echo "Nie udało się usunąć użytkownika";
 	    }
     }
-
+    if (isset($_GET["addUserForm"])){
+      echo <<< ADDUSERFORM
+        <h4>Dodawanie użytkownika</h4>
+        <form action="../scripts/add_user.php" method="post">
+          <input type="text" name="firstName" placeholder="Podaj imię" autofocus><br><br>
+          <input type="text" name="lastName" placeholder="Podaj nazwisko"><br><br>
+          <select name="city_id">
+ ADDUSERFORM;
+      $sql = "SELECT * FROM cities;";
+      $result = $conn->query($sql);
+      while ($city = $result->fetch_assoc()){
+        echo "<option value=\"$city[id]\">$city[city]</option>";
+      }
+	    echo <<< ADDUSERFORM
+          </select><br><br>
+          <input type="date" name="birthday">Data urodzenia<br><br>
+          <input type="submit" value="Dodaj użytkownika">
+        </form>
+ADDUSERFORM;
+    }else{
+      echo "<hr><a href=\"./4_db_table_delete_add.php?addUserForm=1\">Dodaj użytkownika</a>";
+    }
     $conn->close();
+
   ?>
+
 </body>
 </html>
