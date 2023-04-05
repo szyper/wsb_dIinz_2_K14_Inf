@@ -1,13 +1,23 @@
 <?php
 	session_start();
-  // print_r($_POST);
+  //print_r($_POST);
+	$error = 0;
 	foreach ($_POST as $key => $value){
 		if (empty($value)){
 			// echo "$key<br>";
 			$_SESSION["error"] = "Wypełnij wszystkie pola";
-			echo "<script>history.back();</script>";
-			exit();
+			$error++;
 		}
+	}
+
+	if (!isset($_POST["term"])){
+		$_SESSION["error"] = "Zatwierdź regulamin!";
+		$error++;
+	}
+
+	if ($error != 0){
+		echo "<script>history.back();</script>";
+		exit();
 	}
 
 	require_once "./connect.php";
@@ -24,4 +34,5 @@
 		$_SESSION["error"] = "Nie dodano rekordu!";
 	}
 	$conn->close();
-	header("location: ../4_db/4_db_table_delete_add.php");
+//	header("location: ../4_db/4_db_table_delete_add.php");
+	header("location: ../4_db/5_db_table_delete_add_update.php");
