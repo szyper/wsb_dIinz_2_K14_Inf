@@ -15,6 +15,10 @@
    28  clear
    29  git clone https://github.com/miroslawszyper/3d.git
    30  cd 3d
+
+
+
+
    31  ls
    32  alias c=clear
    33  c
@@ -498,3 +502,11 @@
   511  history
   512  c
   513  history > plikhistoria
+
+
+
+git checkout -b "register"
+  502  git add *
+  503  git commit -m "register user"
+  504  git push
+  505  git push --set-upstream origin register
