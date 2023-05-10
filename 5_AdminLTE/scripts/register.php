@@ -75,5 +75,5 @@ if ($error != 0){
 		$_SESSION["error"] = "Nie dodano użytkownika";
 	}
 
-	//header("location: ../pages/register.php");
+	header("location: ../pages/register.php");
 
