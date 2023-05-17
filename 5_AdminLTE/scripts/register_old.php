@@ -1,15 +1,14 @@
 <?php
 	if ($_SERVER["REQUEST_METHOD"] == "POST"){
-//		echo "<pre>";
-//		print_r($_POST);
-//		echo "</pre>";
+		echo "<pre>";
+		//print_r($_POST);
+		echo "</pre>";
 
 		session_start();
+		require_once "./connect.php";
 
-		$required_fields = ["firstName", "lastName", "email1", "email2", "pass1","pass2", "birthday", "city_id", "avatar"];
-
-		foreach ($required_fields as $value){
-			if (empty($_POST[$value])){
+		foreach ($_POST as $key => $value){
+			if (empty($value)){
 				$_SESSION["error"] = "Wypełnij wszystkie pola!";
 				echo "<script>history.back();</script>";
 				exit();
@@ -38,14 +37,6 @@
 			$error = 1;
 		}
 
-		if ($_POST["additional_email1"] != $_POST["additional_email2"]){
-			$_SESSION["error"] = "Adresy dodatkowej poczty elektronicznej są różne!";
-			$error = 1;
-		}else{
-			if (empty($_POST["additional_email1"]))
-				$_POST["additional_email1"] = NULL;
-		}
-
 		if ($error != 0){
 			echo "<script>history.back();</script>";
 			exit();
@@ -57,7 +48,6 @@
 			exit();
 		}
 
-		require_once "./connect.php";
 		$stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
 		$stmt->bind_param('s', $_POST["email1"]);
 		$stmt->execute();
@@ -74,14 +64,14 @@
 		}
 		*/
 
-		$stmt = $conn->prepare("INSERT INTO `users` (`email`, `additional_email`, `city_id`, `firstName`, `lastName`, `birthday`, `avatar`, `password`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, current_timestamp());");
+		$stmt = $conn->prepare("INSERT INTO `users` (`email`, `city_id`, `firstName`, `lastName`, `birthday`, `avatar`, `password`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, current_timestamp());");
 
 		$pass = password_hash('$_POST[pass1]', PASSWORD_ARGON2ID);
 
 
 		$avatar = ($_POST["avatar"] == 'w') ? './img/woman.png' : './img/man.png';
 
-		$stmt->bind_param('ssisssss', $_POST["email1"], $_POST["additional_email1"], $_POST["city_id"], $_POST["firstName"], $_POST["lastName"], $_POST["birthday"], $avatar, $pass);
+		$stmt->bind_param('sisssss', $_POST["email1"], $_POST["city_id"], $_POST["firstName"], $_POST["lastName"], $_POST["birthday"], $avatar, $pass);
 
 		$stmt->execute();
 
