@@ -16,10 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 	//ddoać do rejestracji
 	//dodać filtrowanie danych!!!
-	if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\d\s])\S{8,}$/', $pass)) {
-		// Hasło nie spełnia wymagań dotyczących złożoności
-		// Wyświetl komunikat błędu lub podaj inną formę informacji zwrotnej
-	}
+
 
 
 	$pass = filter_var($pass, FILTER_SANITIZE_EMAIL);

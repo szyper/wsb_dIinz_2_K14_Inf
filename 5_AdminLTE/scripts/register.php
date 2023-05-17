@@ -37,10 +37,16 @@
 		$error = 1;
 	}
 
-if ($error != 0){
-	echo "<script>history.back();</script>";
-	exit();
-}
+	if ($error != 0){
+		echo "<script>history.back();</script>";
+		exit();
+	}
+
+	if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\d\s])\S{8,}$/', $_POST["pass1"])) {
+		$_SESSION["error"] = "Hasło nie spełnia wymagań!";
+		echo "<script>history.back();</script>";
+		exit();
+	}
 
 	$stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
 	$stmt->bind_param('s', $_POST["email1"]);
@@ -71,6 +77,8 @@ if ($error != 0){
 
 	if ($stmt->affected_rows == 1){
 		$_SESSION["success"] = "Prawidowo dodano użytkownika $_POST[firstName] $_POST[lastName]";
+		header("location: ../pages");
+		exit();
 	}else{
 		$_SESSION["error"] = "Nie dodano użytkownika";
 	}
