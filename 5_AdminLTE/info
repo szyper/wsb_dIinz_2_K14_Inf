@@ -1,0 +1,6 @@
+Dodać zmienne dynamiczne
+
+foreach ($_POST as $key => $value){
+			if ($key != "pass1" && $key != "pass2")
+				?????????????? = sanitizeInput($_POST["$key"]);
+		}

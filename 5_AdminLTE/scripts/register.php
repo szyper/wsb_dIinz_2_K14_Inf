@@ -1,4 +1,16 @@
 <?php
+	function sanitizeInput($input){
+		$input = htmlentities(stripslashes(trim($input)));
+		return $input;
+	}
+
+	/*
+	echo "Zmienna: ".$_POST["firstName"]." ==> ";
+	$_POST["firstName"] = sanitizeInput($_POST["firstName"]);
+	echo $_POST["firstName"].", ilość znaków: ".strlen($_POST["firstName"]);
+	exit();
+	*/
+
 	if ($_SERVER["REQUEST_METHOD"] == "POST"){
 //		echo "<pre>";
 //		print_r($_POST);
@@ -8,45 +20,45 @@
 
 		$required_fields = ["firstName", "lastName", "email1", "email2", "pass1","pass2", "birthday", "city_id", "avatar"];
 
+		$errors = [];
+
 		foreach ($required_fields as $value){
 			if (empty($_POST[$value])){
-				$_SESSION["error"] = "Wypełnij wszystkie pola!";
-				echo "<script>history.back();</script>";
-				exit();
+				//$_SESSION["error"] = "Wypełnij wszystkie pola!";
+				$errors[] = "Pole <b>$value</b> jest wymagane";
+				//echo "<script>history.back();</script>";
+				//exit();
 			}
 		}
 
-		$error = 0;
-
-		if (!isset($_POST["terms"])){
-			$_SESSION["error"] = "Zaznacz regulamin!";
-			$error = 1;
+		if (!empty($errors)){
+			//print_r($errors);
+			$_SESSION["error"] = implode("<br>", $errors);
+			echo "<script>history.back();</script>";
+			exit();
 		}
 
-		if (!isset($_POST["avatar"])){
-			$_SESSION["error"] = "Wybierz płeć!";
-			$error = 1;
-		}
-
-		if ($_POST["pass1"] != $_POST["pass2"]){
-			$_SESSION["error"] = "Hasła są różne!";
-			$error = 1;
-		}
-
-		if ($_POST["email1"] != $_POST["email2"]){
-			$_SESSION["error"] = "Adresy poczty elektronicznej są różne!";
-			$error = 1;
-		}
+		if ($_POST["email1"] != $_POST["email2"])
+			$errors[] = "Adresy poczty elektronicznej są różne!";
 
 		if ($_POST["additional_email1"] != $_POST["additional_email2"]){
-			$_SESSION["error"] = "Adresy dodatkowej poczty elektronicznej są różne!";
-			$error = 1;
+			$errors[] = "Adresy dodatkowej poczty elektronicznej są różne!";
 		}else{
 			if (empty($_POST["additional_email1"]))
 				$_POST["additional_email1"] = NULL;
 		}
 
-		if ($error != 0){
+		if ($_POST["pass1"] != $_POST["pass2"])
+			$errors[] = "Hasła są różne!";
+
+		if (!isset($_POST["avatar"]))
+			$errors[] = "Wybierz płeć!";
+
+		if (!isset($_POST["terms"]))
+			$errors[] = "Zaznacz regulamin!";
+
+		if (!empty($errors)){
+			$_SESSION["error"] = implode("<br>", $errors);
 			echo "<script>history.back();</script>";
 			exit();
 		}
@@ -55,6 +67,11 @@
 			$_SESSION["error"] = "Hasło nie spełnia wymagań!";
 			echo "<script>history.back();</script>";
 			exit();
+		}
+
+		foreach ($_POST as $key => $value){
+			if ($key != "pass1" && $key != "pass2")
+				sanitizeInput($_POST["$key"]);
 		}
 
 		require_once "./connect.php";
