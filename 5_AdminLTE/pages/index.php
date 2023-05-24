@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,6 +30,16 @@
 ERROR;
       unset($_GET["error"]);
     }
+
+  if (isset($_SESSION["success"])){
+	  echo <<< ERROR
+        <div class="callout callout-success">
+                  <h5>Gratulacje!</h5>
+                  <p>$_SESSION[success]</p>
+        </div>
+ERROR;
+	  unset($_SESSION["success"]);
+  }
   ?>
   <div class="card card-outline card-primary">
     <div class="card-header text-center">

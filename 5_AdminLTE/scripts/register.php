@@ -71,7 +71,7 @@
 
 		foreach ($_POST as $key => $value){
 			if ($key != "pass1" && $key != "pass2")
-				sanitizeInput($_POST["$key"]);
+				$$key = sanitizeInput($_POST["$key"]);
 		}
 
 		require_once "./connect.php";
@@ -98,7 +98,7 @@
 
 		$avatar = ($_POST["avatar"] == 'w') ? './img/woman.png' : './img/man.png';
 
-		$stmt->bind_param('ssisssss', $_POST["email1"], $_POST["additional_email1"], $_POST["city_id"], $_POST["firstName"], $_POST["lastName"], $_POST["birthday"], $avatar, $pass);
+		$stmt->bind_param('ssisssss', $email1, $additional_email1, $city_id, $firstName, $lastName, $birthday, $avatar, $pass);
 
 		$stmt->execute();
 
