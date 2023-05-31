@@ -1,5 +1,9 @@
 <?php
   session_start();
+  if (isset($_SESSION["logged"]) && session_status() == 2 && session_id() == $_SESSION["logged"]["session_id"]){
+    $_SESSION["error"] = "Zaloguj się!";
+    echo "<script>history.back();</script>";
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +35,16 @@ ERROR;
       unset($_GET["error"]);
     }
 
+  if (isset($_GET["logout"])){
+	  echo <<< ERROR
+        <div class="callout callout-info">
+                  <h5>Info!</h5>
+                  <p>Prawidłowo wylogowano użytkownika</p>
+        </div>
+ERROR;
+	  unset($_GET["logout"]);
+  }
+
   if (isset($_SESSION["success"])){
 	  echo <<< ERROR
         <div class="callout callout-success">
@@ -39,6 +53,16 @@ ERROR;
         </div>
 ERROR;
 	  unset($_SESSION["success"]);
+  }
+
+  if (isset($_SESSION["error"])){
+	  echo <<< ERROR
+        <div class="callout callout-danger">
+                  <h5>Błąd!</h5>
+                  <p>$_SESSION[error]</p>
+        </div>
+ERROR;
+	  unset($_SESSION["error"]);
   }
   ?>
   <div class="card card-outline card-primary">

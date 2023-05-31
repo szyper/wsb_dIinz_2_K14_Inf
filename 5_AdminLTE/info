@@ -1,6 +1,5 @@
-nie działa weryfiakcja hasła
-rozwiązanie:
+navbar - nagłówek
+footer - stopka
 
-błąd w skrypcie rejestracyjnym:
-$pass = password_hash('$_POST[pass1]', PASSWORD_ARGON2ID);
-$pass = password_hash($_POST[pass1], PASSWORD_ARGON2ID);
+aside - menu
+content

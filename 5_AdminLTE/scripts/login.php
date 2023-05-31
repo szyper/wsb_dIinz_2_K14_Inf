@@ -1,4 +1,5 @@
 <?php
+session_start();
 //print_r($_POST);
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 	// print_r($_SERVER["REQUEST_METHOD"]);
@@ -31,13 +32,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 	if ($result->num_rows != 0){
 		$user = $result->fetch_assoc();
-		print_r($user);
+		//print_r($user);
 			//echo $pass;
 //		echo $user["password"];
 		if (password_verify($pass, $user["password"])){
-			echo "zalogowany";
+			$_SESSION["logged"]["firstName"] = $user["firstName"];
+			$_SESSION["logged"]["lastName"] = $user["lastName"];
+			$_SESSION["logged"]["role_id"] = $user["role_id"];
+			//echo session_id();
+			session_regenerate_id();
+			$_SESSION["logged"]["session_id"] = session_id();
+			//print_r($_SESSION["logged"]);
+			header("location: ../pages/logged.php"); //index2.html
+
 		}else{
-			echo "niezalogowany";
+			$_SESSION["error"] = "Błędny login lub hasło!";
+			echo "<script>history.back();</script>";
+			exit();
 		}
 	}else{
 		$_SESSION["error"] = "Błędny login lub hasło!";
