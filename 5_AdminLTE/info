@@ -1,6 +1,6 @@
-Dodać zmienne dynamiczne
+nie działa weryfiakcja hasła
+rozwiązanie:
 
-foreach ($_POST as $key => $value){
-			if ($key != "pass1" && $key != "pass2")
-				?????????????? = sanitizeInput($_POST["$key"]);
-		}
+błąd w skrypcie rejestracyjnym:
+$pass = password_hash('$_POST[pass1]', PASSWORD_ARGON2ID);
+$pass = password_hash($_POST[pass1], PASSWORD_ARGON2ID);

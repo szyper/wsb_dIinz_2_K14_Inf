@@ -14,7 +14,19 @@
 		$$key = $value;
 	}
 
-	echo "<br>"."$name"." ".$surname;
+	echo "<br>"."$name"." ".$surname."<hr>";
+
+//	if (filter_var('bob@example.com', FILTER_VALIDATE_EMAIL)){
+//	if (filter_var('http://bob@example.com', FILTER_VALIDATE_EMAIL)){
+	if (filter_var('bobexample.com', FILTER_VALIDATE_EMAIL)){
+		echo "ok";
+	}else{
+		echo "error";
+	}
+
+	echo "<hr>";
+
+
 
 
 
